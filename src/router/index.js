@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
+import Home from '@/components/Home'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -13,6 +14,26 @@ export default new Router({
     {
       path: '/Login',
       component: Login
+    },
+    {
+      path: '/Home',
+      component: Home
     }
   ]
 })
+// beforeEach全局导航守卫，路由状态发生改变都会经过它
+router.beforeEach((to, from, next) => {
+  // 如果去首页 直接放行
+  if (to.path === '/Login') {
+    next()
+    return
+  }
+  let shopToken = localStorage.getItem('shopToken')
+  // 如果有token说明登录过，否则没登录过去登陆
+  if (shopToken) {
+    next()
+  } else {
+    next('/Login')
+  }
+})
+export default router
