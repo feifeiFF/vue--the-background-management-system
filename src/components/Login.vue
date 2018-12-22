@@ -61,9 +61,8 @@ export default {
       this.$refs.form.validate(valid => {
         // 校验失败的话 阻止表单提交
         // validate方法参数是一个回调函数，函数参数1是否校验成功 boolean 参数2 错误对象
-        if (valid !== true) {
+        if (!valid) {
           this.$message.error('登录失败哦，请重新登录 ~')
-          return false
         }
 
         axios({
