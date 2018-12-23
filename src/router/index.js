@@ -3,9 +3,11 @@ import Router from 'vue-router'
 import Login from '@/components/Login'
 import Home from '@/components/Home'
 import User from '@/components/User'
+import axios from 'axios'
 
 Vue.use(Router)
-
+Vue.prototype.axios = axios
+axios.defaults.baseURL = 'http://localhost:8888/api/private/v1/'
 const router = new Router({
   routes: [
     {
@@ -19,12 +21,10 @@ const router = new Router({
     {
       path: '/Home',
       component: Home,
-      children: [
-        {
-          path: '/user',
-          component: User
-        }
-      ]
+      children: [{
+        path: '/user',
+        component: User
+      }]
     }
   ]
 })

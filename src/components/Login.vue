@@ -14,11 +14,16 @@
         <el-input type="text" v-model="form.username" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="form.password" autocomplete="off"></el-input>
+        <el-input
+          type="password"
+          v-model="form.password"
+          autocomplete="off"
+          @keyup.enter.native="submitForm"
+        ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('form')">提交</el-button>
-        <el-button @click="resetForm('form')" class="reset">重置</el-button>
+        <el-button type="primary" @click="submitForm(form)">提交</el-button>
+        <el-button @click="resetForm(form)" class="reset">重置</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -26,7 +31,7 @@
 
 <script>
 // 导入 axios 登录需要发送 ajax 请求
-import axios from 'axios'
+// axios 已经 添加到 vue的原型上了。
 
 export default {
   data() {
@@ -38,7 +43,7 @@ export default {
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 12个字符', trigger: 'blur' }
+          { min: 3, max: 12, message: '长度在 3 到 12个字符', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'change' },
@@ -65,24 +70,24 @@ export default {
           this.$message.error('登录失败哦，请重新登录 ~')
         }
 
-        axios({
+        this.axios({
           method: 'post',
           url: 'http://localhost:8888/api/private/v1/login',
           data: this.form
         }).then(res => {
-          console.log(res.data)
-          if (res.data.meta.status === 200) {
+          let { meta, data } = res
+          if (meta.status === 200) {
             this.$message({
               showClose: true,
               message: '登录成功',
               type: 'success'
             })
-            localStorage.setItem('shopToken', res.data.data.token)
+            localStorage.setItem('shopToken', data.token)
             this.$router.push({ path: 'Home' })
           } else {
             this.$message({
               showClose: true,
-              message: res.data.meta.msg,
+              message: meta.msg,
               type: 'error'
             })
           }
