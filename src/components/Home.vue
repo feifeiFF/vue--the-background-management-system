@@ -42,11 +42,11 @@
               <i class="el-icon-location"></i>
               <span>权限管理</span>
             </template>
-            <el-menu-item index="2-1">
+            <el-menu-item index="roles">
               <i class="el-icon-menu"></i>
               <span slot="title">角色列表</span>
             </el-menu-item>
-            <el-menu-item index="2-2">
+            <el-menu-item index="rights">
               <i class="el-icon-menu"></i>
               <span slot="title">权限列表</span>
             </el-menu-item>
@@ -63,26 +63,25 @@
 export default {
   methods: {
     // 退化功能：退出之前询问用户事故确定退出，确定退出时销毁token，重新去登录页。
-    loginout() {
-      this.$confirm('您确定退出当前系统吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$message({
-            type: 'success',
-            message: '退出成功!'
-          })
-          localStorage.removeItem('shopToken')
-          this.$router.push('Login')
+    async loginout() {
+      try {
+        await this.$confirm('您确定退出当前系统吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消退出'
-          })
+        this.$message({
+          type: 'success',
+          message: '退出成功!'
         })
+        localStorage.removeItem('shopToken')
+        this.$router.push('Login')
+      } catch (e) {
+        this.$message({
+          type: 'info',
+          message: '已取消退出'
+        })
+      }
     }
   }
 }

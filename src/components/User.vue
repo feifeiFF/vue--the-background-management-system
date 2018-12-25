@@ -335,11 +335,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-.el-breadcrumb {
-  padding: 20px 0px;
-  background-color: snow;
-  margin-bottom: 20px;
-}
+
 .el-pagination {
   margin: 20px 0;
 }
