@@ -13,7 +13,7 @@
     <el-container>
       <el-aside width="200px">
         <el-menu
-          default-active="1-1"
+          :default-active="$route.path.slice(1)"
           class="el-menu-vertical-demo"
           background-color="#2d434c"
           text-color="#fff"
@@ -27,28 +27,14 @@
              el-submenu 子菜单
              el-menu-item-goup 菜单分组
           el-menu-item 菜单项-->
-          <el-submenu index="1">
+          <el-submenu :index="itemsub.path" v-for="itemsub in menu" :key="itemsub.id">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>用户管理</span>
+              <span>{{ itemsub.authName}}</span>
             </template>
-            <el-menu-item index="User">
+            <el-menu-item :index="item.path" v-for="item in itemsub.children" :key="item.id">
               <i class="el-icon-menu"></i>
-              <span slot="title">用户列表</span>
-            </el-menu-item>
-          </el-submenu>
-          <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>权限管理</span>
-            </template>
-            <el-menu-item index="roles">
-              <i class="el-icon-menu"></i>
-              <span slot="title">角色列表</span>
-            </el-menu-item>
-            <el-menu-item index="rights">
-              <i class="el-icon-menu"></i>
-              <span slot="title">权限列表</span>
+              <span slot="title">{{ item.authName}}</span>
             </el-menu-item>
           </el-submenu>
         </el-menu>
@@ -61,6 +47,11 @@
 </template>
 <script>
 export default {
+  data() {
+    return {
+      menu: {}
+    }
+  },
   methods: {
     // 退化功能：退出之前询问用户事故确定退出，确定退出时销毁token，重新去登录页。
     async loginout() {
@@ -82,7 +73,22 @@ export default {
           message: '已取消退出'
         })
       }
+    },
+    // 动态加载左侧菜单栏
+    async getMenu() {
+      let res = await this.axios.get('menus')
+      let {
+        meta: { status },
+        data
+      } = res
+      if (status === 200) {
+        this.menu = data
+        console.log(res)
+      }
     }
+  },
+  created() {
+    this.getMenu()
   }
 }
 </script>

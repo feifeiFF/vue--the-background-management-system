@@ -8,6 +8,10 @@ import axios from 'axios'
 //  将公共的less文件引入入口文件，需要加载 less-loader 等
 import '@/assets/base.less'
 import 'element-ui/lib/theme-chalk/index.css'
+// 引入第三方插件 element-tree-grid
+// 使用步骤 1 用import 或者 quire 引入  2 使用  Vue.use()   3 使用组件
+import ElTreeGrid from 'element-tree-grid'
+Vue.component(ElTreeGrid.name, ElTreeGrid)
 // 关闭生产环境的提示
 Vue.config.productionTip = false
 // 设置请求拦截器
